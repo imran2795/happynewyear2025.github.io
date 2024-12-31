@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2025</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #000428, #004e92);
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 5em;
+            font-weight: bold;
+            text-shadow: 0 0 20px #ffcc00, 0 0 40px #ffaa00, 0 0 60px #ff7700;
+            animation: glow 2s infinite alternate;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 0.5em;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px #ffcc00, 0 0 40px #ffaa00, 0 0 60px #ff7700;
+            }
+            to {
+                text-shadow: 0 0 30px #ffdd33, 0 0 50px #ff9900, 0 0 70px #ff5500;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎉 Happy New Year 2025 🎉</h1>
+    <h2>Wishing You Endless Joy, Success, and Happiness!</h2>
+    <canvas id="fireworks"></canvas>
+
+    <footer>
+        Designed by <a href="https://github.com/imran2795" target="_blank">Md. Imran Hossain</a>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const fireworks = [];
+
+        class Firework {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.particles = [];
+                for (let i = 0; i < 100; i++) {
+                    this.particles.push({
+                        x: this.x,
+                        y: this.y,
+                        vx: Math.random() * 4 - 2,
+                        vy: Math.random() * 4 - 2,
+                        alpha: 1,
+                        size: Math.random() * 3 + 1,
+                    });
+                }
+            }
+
+            update() {
+                this.particles.forEach((p) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.alpha -= 0.02;
+                });
+                this.particles = this.particles.filter((p) => p.alpha > 0);
+            }
+
+            draw() {
+                this.particles.forEach((p) => {
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+        }
+
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.5;
+            const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            fireworks.push(new Firework(x, y, color));
+        }
+
+        function loop() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            fireworks.forEach((firework, index) => {
+                firework.update();
+                firework.draw();
+                if (firework.particles.length === 0) {
+                    fireworks.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(loop);
+        }
+
+        setInterval(createFirework, 700);
+        loop();
+    </script>
+</body>
+</html>
